@@ -192,17 +192,23 @@
 <div>This version will be <em>significantly</em> different, and will signal a <strong>shift</strong> in the way users <em>interact</em> with Mapbox tools.</div>
 <div>So I think it's <strong>important</strong> to look at <em>how</em> the new version of <strong>Mapbox Studio</strong> will be different <em>before</em> we talk <strong>CartoCSS</strong>...</div>
 <div>... because knowing <em>how these tools work</em> will help a <strong>ton</strong> when using them in the future.</div>
+<div>With that in mind, I've broken this (kind of hella dense) presentation into a few parts:</div>
+<div>PART ONE: Mapbox Studio and Vector Tiles</div>
+<div>PART TWO: Mapbox and GL</div>
+<div>PART THREE: Into the future!</div>
 <div data-bodyclass='puppy'>Make sense?</div>
 <div>Cool! <em>Let's get started.</em></div>
+
 <div>Some <strong>things to do</strong> while I'm talking:</div>
 <div>Use the coupon code <em>MAPBOX4MAPTIME99</em> to upgrade to a <strong>Standard account</strong> at <a href='https://mapbox.com/plans'>mapbox.com /plans</a>. If you already have an account, you can <strong>upgrade</strong> through your Billing page: <a href='https://mapbox.com/account/billing'>mapbox.com /account/billing</a>.</div>
 <div>If you haven't yet, <strong>download Mapbox Studio</strong> from <a href='https://mapbox.com/mapbox-studio'>mapbox.com /mapbox-studio</a>. If you have, <em>pop it open</em> as there may have been an <strong>update</strong> since the last time you did.</div>
 <div data-bodyclass='ready'></div>
+<div>PART ONE: Mapbox Studio and Vector Tiles</div>
 <div><em>First</em>, what is <strong>Mapbox Studio</strong>?</div>
 <div><strong>Mapbox Studio</strong> is a tool for <em>styling custom basemaps</em>.</div>
 <div data-bodyclass='roadtrippers'></div>
 <div data-bodyclass='wheatpaste'></div>
-<div>It comes <strong>pre-loaded</strong> with a <em>vector tile dataset</em> called <a href='https://mapbox.com/developers/vector-tiles'>mapbox-streets-v5</a>, generated from a combo of <a href='https://osm.org'>OpenStreetMap</a> and <a href='https://naturalearth.com'>Natural Earth</a> data!</div>
+<div>It comes <strong>pre-loaded</strong> with a couple <em>vector tile datasets</em> called <a href='https://www.mapbox.com/developers/vector-tiles/mapbox-streets/'>mapbox-streets-v6</a> and <a href='https://www.mapbox.com/developers/vector-tiles/mapbox-terrain/'>mapbox-terrain-v2</a>, generated from a combo of <a href='https://osm.org'>OpenStreetMap</a> and <a href='https://naturalearth.com'>Natural Earth</a> data!</div>
 <div>Using a styling language called <strong>CartoCSS</strong>, you can apply <em>style rules</em> to the vector data to create <strong>map tiles</strong>.</div>
 <div data-bodyclass='pencil'></div>
 <div><strong>Mapbox Studio</strong> is <em>also</em> a tool for creating <strong>your own</strong> vector tile datasets from <em>custom sources</em>.</div>
@@ -225,7 +231,7 @@
 <div><a href='https://mapbox.com/mapbox-studio'>Mapbox Studio</a> and <strong>vector tiles</strong> are only <em>slightly</em> different.</div>
 <div>What's <em>different</em>?</div>
 <div>1. Use <strong>vector data</strong></div>
-<div>2. Convert the <strong>vector data</strong> from its original format to <em>vector tile format</em> (mbtiles or pbf) via upload from Mapbox Studio to Mapbox.com.</div>
+<div>2. Convert the <strong>vector data</strong> from its original format to <em>vector tile format (PBF, or protocol buffers)</em> via upload from Mapbox Studio to Mapbox.com.</div>
 <div>3. Load the <em>vector tile data</em> (instead of the raw vector features) into Mapbox Studio with its dataset ID and style with CartoCSS</div>
 <div>4. Export style to Mapbox.com.</div>
 <div>5. When a style is requested in the browser, Mapnik takes the style, grabs the source it references, and creates image tiles ON THE FLY to serve to the browser.</div>
@@ -235,6 +241,7 @@
 <div>C) You can give Mapnik options on request (e.g. retina, multiple styles) and the tiles are created and served quickly.</div>
 <div>D) Hosting vector data independently of the style means it can be rendered in many different ways...</div>
 <div>... which is where <strong>the new Mapbox Studio</strong> comes in.</div>
+<div>PART TWO: Mapbox and GL</div>
 <div>Some of you may have seen or heard of this crazy Mapbox GL thing.</div>
 <div><iframe src='https://player.vimeo.com/external/125965258.hd.mp4?s=e47e44fb3826d9e9aee246f07df35703&profile_id=113'></iframe></div>
 <div>GL is a <em>different</em> way of <strong>rendering</strong> data on your screen.</div>
@@ -245,20 +252,21 @@
 <div data-bodyclass='mindblown'></div>
 <div>This is HUGE and will change the way we deal with maps forever.</div>
 <div>How? Some major things:</div>
-<div>1. Fractional zoom and fading between zoom levels.</div>
+<div>Big change #1: Fractional zoom and fading between zoom levels.</div>
 <div>When creating vector tiles, you get to decide which datasets are stored at which whole-number zoom level.</div>
 <div>But the data can be rendered at fractional zoom levels, because it's vector data and vectors always have good resolution.</div>
 <div>This means awesome, smooth transitions.</div>
-<div>2. The overlay/basemap paradigm is over.</div>
+<div>Big change #2: The overlay/basemap paradigm is over.</div>
 <div>Right now, you typically have a map tile basemap raster layer, and a vector layer on top that you can interact with via JavaScript.</div>
 <div>Rasters always on bottom, vectors always on top.</div>
 <div>With GL, it's all vectors, which means you can put any data in any order.</div>
 <div>For example, a choropleth map with labels on top!</div>
-<div>3. Super fast maps on mobile.</div>
+<div>Big change #3: Super fast maps on mobile.</div>
 <div>In addition to the WebGL processing, we also are creating native GL SDKs (software development kits) for mobile.</div>
 <div>This means that, instead of requesting rasters over a phone connection (slow), users are requesting vectors (fast!) that are rendered with OpenGL right on the device.</div>
 <div>Super fast. Super handy.</div>
 <div>But what does this have to do with Mapbox Studio?</div>
+<div>PART THREE: Into the future!</div>
 <div>Let's talk about CartoCSS for a minute. What is CartoCSS, really?</div>
 <div>It is a styling language that serves as a pre-processor for Mapnik styles.</div>
 <div>Mapnik can read CartoCSS and translate it into style rules when it's generating raster tiles.</div>
@@ -276,16 +284,16 @@
 <div>This is super awesome.</div>
 <div>But it's also going to be a shift in the way we do things.</div>
 <div>What are some of the main challenges here?</div>
-<div>1. Moving from a raster tile code paradigm to a GL code paradigm for map interactions.</div>
+<div>Challenge #1: Moving from a raster tile code paradigm to a GL code paradigm for map interactions.</div>
 <div>With GL vector tile rendering, you will be using Mapbox GL JS on the front-end instead of Mapbox.js.</div>
 <div>Some things that are easy in one are hard in the other, and vice versa.</div>
 <div>There will be lots of examples!</div>
-<div>2. Moving from CartoCSS styling to GL styling.</div>
+<div>Challenge #2: Moving from CartoCSS styling to GL styling.</div>
 <div>There is no practical way to convert CartoCSS style sheets to GL styles.</div>
 <div>CartoCSS has whole-number zoom-specific styling...</div>
 <div>... while GL has fractional zoom and transitions.</div>
 <div>That's just one complication.</div>
-<div>3. Not every browser/system can support GL.</div>
+<div>Challenge #3: Not every browser/system can support GL.</div>
 <div>Fortunately, you can easily get raster tiles from your GL styles should you need them...</div>
 <div>... but you'll have to build interactions in Mapbox.js AND Mapbox GL JS to keep things like tooltips.</div>
 <div>It's a little bit of a different way of thinking about things, and it's confusing.</div>
