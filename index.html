@@ -187,108 +187,75 @@
 <div>Go to <a href='http://lyzidiamond.com/mapbox-stl'>http://lyzidiamond.com /mapbox-stl</a> to follow along.</div>
 <div>(Use <strong>left</strong> and <strong>right</strong> arrows to navigate. Links have a <a href="#4">purple background</a>.)</div>
 <div data-bodyclass='studio center'><br><br>Today we're going to talk about <a href='https://mapbox.com/mapbox-studio'>Mapbox Studio</a>.</div>
-<div>As <a href='https://www.mapbox.com/blog/designing-a-map-with-mapbox-studio/'>some of you may have seen</a>, we are getting ready to release a <em>new</em> version of <strong>Mapbox Studio</strong>:</div>
-<div><iframe src='https://player.vimeo.com/external/134670690.hd.mp4?s=028152906d64c7dda3d05b336b93c061&profile_id=113'></iframe></div>
-<div>This version will be <em>significantly</em> different, and will signal a <strong>shift</strong> in the way users <em>interact</em> with Mapbox tools.</div>
-<div>So I think it's <strong>important</strong> to look at <em>how</em> the new version of <strong>Mapbox Studio</strong> will be different <em>before</em> we talk <strong>CartoCSS</strong>...</div>
-<div>... because knowing <em>how these tools work</em> will help a <strong>ton</strong> when using them in the future.</div>
-<div data-bodyclass='puppy'>Make sense?</div>
+<div>Agenda:<br>Part 1: Sources and styles<br>Part 2: Quick notes on the future of Mapbox Studio<br>Part 3: Playing with Mapbox Studio!<br></div>
+<div data-bodyclass='ready'></div>
 <div>Cool! <em>Let's get started.</em></div>
 <div>Some <strong>things to do</strong> while I'm talking:</div>
 <div>Use the coupon code <em>MAPBOX4MAPTIME99</em> to upgrade to a <strong>Standard account</strong> at <a href='https://mapbox.com/plans'>mapbox.com /plans</a>. If you already have an account, you can <strong>upgrade</strong> through your Billing page: <a href='https://mapbox.com/account/billing'>mapbox.com /account/billing</a>.</div>
 <div>If you haven't yet, <strong>download Mapbox Studio</strong> from <a href='https://mapbox.com/mapbox-studio'>mapbox.com /mapbox-studio</a>. If you have, <em>pop it open</em> as there may have been an <strong>update</strong> since the last time you did.</div>
-<div data-bodyclass='ready'></div>
 <div><em>First</em>, what is <strong>Mapbox Studio</strong>?</div>
-<div><strong>Mapbox Studio</strong> is a tool for <em>styling custom basemaps</em>.</div>
+<div><strong>Mapbox Studio</strong> is a tool for <em>creating</em> and <em>styling vector data</em>.</div>
 <div data-bodyclass='roadtrippers'></div>
 <div data-bodyclass='wheatpaste'></div>
-<div>It comes <strong>pre-loaded</strong> with a <em>vector tile dataset</em> called <a href='https://mapbox.com/developers/vector-tiles'>mapbox-streets-v5</a>, generated from a combo of <a href='https://osm.org'>OpenStreetMap</a> and <a href='https://naturalearth.com'>Natural Earth</a> data!</div>
-<div>Using a styling language called <strong>CartoCSS</strong>, you can apply <em>style rules</em> to the vector data to create <strong>map tiles</strong>.</div>
-<div data-bodyclass='pencil'></div>
-<div><strong>Mapbox Studio</strong> is <em>also</em> a tool for creating <strong>your own</strong> vector tile datasets from <em>custom sources</em>.</div>
-<div data-bodyclass='tiles'>Let's talk about <em>vector tiles</em>.</div>
-<div data-bodyclass='tilegif'><br><br><br>Before there were <strong>vector tiles</strong>, there were <em>raster tiles</em>.</div>
-<div>(If you've seen <a href='http://maptime.github.io/anatomy-of-a-web-map'>Anatomy of a Web Map</a> then you already know all about this, but <strong>bear with me</strong>.)</div>
-<div><em>Raster tiles</em> are 256px x 256px <strong>PNG</strong> files that are <em>stored</em> on the server and <em>served</em> to the browser on request.</div>
-<div><strong>Only</strong> the tiles in the <em>current map view</em> are requested and loaded. This makes maps <strong>super hella fast</strong>.</div>
-<div data-bodyclass='jstile'>How are <em>raster tiles</em> made?</div>
-<div>1. Use <strong>vector data</strong> (shapefile, GeoJSON, etc)</div>
-<div>2. <strong>Style</strong> the data with a styling language called <em>CartoCSS</em></div>
-<div>3. <strong>Export</strong> data and stylesheet to a <em>renderer</em> (Mapnik) that creates tiled images.</div>
-<div>The images are <em>created</em> at each zoom level and stored in a <strong>specific file structure</strong> as PNGs.</div>
-<div>That makes <em>sense, right</em>?</div>
-<div><strong>Vector data</strong> + <em>style</em> = image with style applied to data.</div>
-<div>(This is how TileMill worked.)</div>
-<div>Then, using a <strong>web mapping library</strong> like <a href='https://mapbox.com/mapbox.js'>Mapbox.js</a>, you create a <em>map container</em> that knows when to load which tiles.</div>
-<div>When your map needs the image tile for a <strong>particular area</strong> at a <strong>particular zoom</strong>, your map container (via the browser) <em>requests</em> it from the server.</div>
-<div>Hooray! A map!</div>
-<div><a href='https://mapbox.com/mapbox-studio'>Mapbox Studio</a> and <strong>vector tiles</strong> are only <em>slightly</em> different.</div>
-<div>What's <em>different</em>?</div>
-<div>1. Use <strong>vector data</strong></div>
-<div>2. Convert the <strong>vector data</strong> from its original format to <em>vector tile format</em> (mbtiles or pbf) via upload from Mapbox Studio to Mapbox.com.</div>
-<div>3. Load the <em>vector tile data</em> (instead of the raw vector features) into Mapbox Studio with its dataset ID and style with CartoCSS</div>
-<div>4. Export style to Mapbox.com.</div>
-<div>5. When a style is requested in the browser, Mapnik takes the style, grabs the source it references, and creates image tiles ON THE FLY to serve to the browser.</div>
-<div>Why is this beneficial?</div>
-<div>A) Vector tiles are stored with all its attributes and can be styled with multiple styles.</div>
-<div>B) This is a way more compact system for data storage (not having to store retina and non-retina, etc).</div>
-<div>C) You can give Mapnik options on request (e.g. retina, multiple styles) and the tiles are created and served quickly.</div>
-<div>D) Hosting vector data independently of the style means it can be rendered in many different ways...</div>
-<div>... which is where <strong>the new Mapbox Studio</strong> comes in.</div>
-<div>Some of you may have seen or heard of this crazy Mapbox GL thing.</div>
-<div><iframe src='https://player.vimeo.com/external/125965258.hd.mp4?s=e47e44fb3826d9e9aee246f07df35703&profile_id=113'></iframe></div>
-<div>GL is a <em>different</em> way of <strong>rendering</strong> data on your screen.</div>
-<div>With both older raster tile creation and the newer vector tile creaton process, your map is requesting images -- slower.</div>
-<div>With GL, instead of passing the <strong>images</strong> to the browser...</div>
-<div>... you will actually pass the <em>vector data itself</em> to the browser...</div>
-<div>... where the <strong>WebGL processor</strong> will <em>render the graphics</em> <strong>right in your browser</strong> -- faster.</div>
+<div>So pretty!</div>
+<div><strong>How</strong> were these maps made?</div>
+<div>Part 1: Sources and styles</div>
+<div>All Mapbox maps are made from a <em>combination</em> of <strong>styles</strong> and <strong>sources</strong>.</div>
+<div>The <em>source</em> is the <strong>underlying vector data</strong> that makes up the <em>features</em> on the map.</div>
+<div>(Sources can also be raster images, but we will come back to that.)</div>
+<div>The <em>style</em> is a file with a <strong>list of rules</strong> for how the <em>source</em> should be rendered.</div>
+<div>Mapbox Studio has a <strong>source mode</strong> and a <strong>style mode</strong>, and we're going to go over <em>both</em>...</div>
+<div>... but to understand and appreciate <strong>why</strong> the style-source paradigm is effective, we need to learn about <em>map tiles</em> and how they have <strong>changed</strong> over time.</div>
+<div>The <em>biggest challenge</em> in web mapping from the <strong>very beginning</strong> has been <em>speed</em>.</div>
+<div>The world is a <strong>big place</strong>, and loading <em>detailed images</em> of the whole thing takes <strong>time</strong>.</div>
+<div data-bodyclass='tiles'>Thus came the invention of the <em>map tile</em> from Google in 2005.</div>
+<div><em>Map tiles</em> were 256px x 256px <strong>PNG</strong> files that were <em>stored</em> on the server and <em>served</em> to the browser on request.</div>
+<div>All of these small images load <strong>way faster</strong> than one giant image...</div>
+<div>... and tiles are only loaded <em>where you're looking</em> in the world and at that <strong>one</strong> zoom level.</div>
+<div>This was <em>way faster</em> than anything else.</div>
+<div><strong>How</strong> were these tiles made?</div>
+<div>At <em>Mapbox</em>, we used a tool called <strong>TileMill</strong>.</div>
+<div>- Start with <em>vector data</em> (shapefile, GeoJSON, etc) and load into TileMill</div>
+<div>- Create a <em>stylesheet</em> using <strong>CartoCSS</strong>, a styling language, in TileMill</div>
+<div>- <em>Export</em> the data and stylesheet from TileMill to Mapbox.com, where a <strong>renderer</strong> (Mapnik) creates <em>map tiles</em></div>
+<div>The images were <em>created</em> at each zoom level and stored in a <strong>specific file structure</strong> as PNGs.</div>
+<div>When your map needs the image tile for a <strong>particular area</strong> at a <strong>particular zoom</strong>, your browser <em>requests</em> it from the server.</div>
+<div>This worked <strong>super well</strong> for a while, but had some <em>drawbacks</em>, particularly with <strong>retina displays</strong>.</div>
+<div>Storing <em>retina tiles</em> AND <strong>non-retina tiles</strong> would take up lots of space!</div>
+<div>And <em>storing images</em> was taking up a lot of space in the first place.</div>
+<div>So instead of storing <strong>fully-rendered images</strong>...</div>
+<div>... we started storing the <em>source data</em> separately from the <em>style rules</em> and then <strong>generating</strong> images when requested.</div>
 <div data-bodyclass='mindblown'></div>
-<div>This is HUGE and will change the way we deal with maps forever.</div>
-<div>How? Some major things:</div>
-<div>1. Fractional zoom and fading between zoom levels.</div>
-<div>When creating vector tiles, you get to decide which datasets are stored at which whole-number zoom level.</div>
-<div>But the data can be rendered at fractional zoom levels, because it's vector data and vectors always have good resolution.</div>
-<div>This means awesome, smooth transitions.</div>
-<div>2. The overlay/basemap paradigm is over.</div>
-<div>Right now, you typically have a map tile basemap raster layer, and a vector layer on top that you can interact with via JavaScript.</div>
-<div>Rasters always on bottom, vectors always on top.</div>
-<div>With GL, it's all vectors, which means you can put any data in any order.</div>
-<div>For example, a choropleth map with labels on top!</div>
-<div>3. Super fast maps on mobile.</div>
-<div>In addition to the WebGL processing, we also are creating native GL SDKs (software development kits) for mobile.</div>
-<div>This means that, instead of requesting rasters over a phone connection (slow), users are requesting vectors (fast!) that are rendered with OpenGL right on the device.</div>
-<div>Super fast. Super handy.</div>
-<div>But what does this have to do with Mapbox Studio?</div>
-<div>Let's talk about CartoCSS for a minute. What is CartoCSS, really?</div>
-<div>It is a styling language that serves as a pre-processor for Mapnik styles.</div>
-<div>Mapnik can read CartoCSS and translate it into style rules when it's generating raster tiles.</div>
-<div>Mapbox Studio styling, at its core, is a visual styling interface for creating style rules for Mapnik.</div>
-<div>When we start using GL, we are no longer using Mapnik.</div>
-<div>So, how do styles work in GL?</div>
-<div>Glad you asked.</div>
-<div>[image of gl style spec json]</div>
-<div>A pretty complicated JSON file.</div>
-<div>CartoCSS is not a pre-processor for GL styles.</div>
-<div>So we need something else to serve as a visual interface for styling, something that can be translated into GL styles.</div>
-<div>That is what the new version of Mapbox Studio is setting out to do.</div>
-<div>With the new Mapbox Studio, you will be able to create your own style JSON via a visual interface, with buttons and sliders.</div>
-<div>This will then be translated into GL style JSON, which will be served with the vector tiles for rendering on the client-side (or native if mobile).</div>
-<div>This is super awesome.</div>
-<div>But it's also going to be a shift in the way we do things.</div>
-<div>What are some of the main challenges here?</div>
-<div>1. Moving from a raster tile code paradigm to a GL code paradigm for map interactions.</div>
-<div>With GL vector tile rendering, you will be using Mapbox GL JS on the front-end instead of Mapbox.js.</div>
-<div>Some things that are easy in one are hard in the other, and vice versa.</div>
-<div>There will be lots of examples!</div>
-<div>2. Moving from CartoCSS styling to GL styling.</div>
-<div>There is no practical way to convert CartoCSS style sheets to GL styles.</div>
-<div>CartoCSS has whole-number zoom-specific styling...</div>
-<div>... while GL has fractional zoom and transitions.</div>
-<div>That's just one complication.</div>
-<div>3. Not every browser/system can support GL.</div>
-<div>Fortunately, you can easily get raster tiles from your GL styles should you need them...</div>
-<div>... but you'll have to build interactions in Mapbox.js AND Mapbox GL JS to keep things like tooltips.</div>
-<div>It's a little bit of a different way of thinking about things, and it's confusing.</div>
+<div>It's a little <strong>confusing</strong>, but fortunately <em>Mapbox Studio</em> makes it fairly straightforward!</div>
+<div>- Start with <em>vector data</em> (shapefile, GeoJSON, etc) and load into <strong>Mapbox Studio source mode</strong></div>
+<div>- <em>Upload</em> the vector data to Mapbox.com where it is converted to a <strong>vector tile dataset (PBF)</strong></div>
+<div>- Load that <em>vector tile dataset</em> into <strong>Mapbox Studio style mode</strong> and create a stylesheet using <em>CartoCSS</em> to style the data</div>
+<div>- <strong>Upload</strong> the <em>style</em> to Mapbox.com.</div>
+<div>The <em>style</em> now has a reference to the <strong>source</strong>.</div>
+<div>Now, when your map needs the image tile for a <strong>particular area</strong> at a <strong>particular zoom</strong>, your browser <em>requests</em> it from the server...</div>
+<div>... and the server <strong>applies</strong> the <em>style</em> to the <em>source</em>, <strong>generates</strong> an image (with Mapnik), and <strong>serves</strong> that image to the client.</div>
+<div>We call these <strong>vector tiles</strong>.</div>
+<div>Vector tiles are <em>awesome</em> because:</div>
+<div>- All of the <strong>properties</strong> and <strong>geometries</strong> of the vector data are stored.</div>
+<div>- <strong>Multiple</strong> styles can be applied to the <em>same</em> source data</div>
+<div>- The info takes up <strong>way</strong> less space, which means it's <strong>way</strong> less expensive</div>
+<div>- It opens up the door for <em>different rendering options</em> like <strong>GL</strong></div>
+<div>(More about that in a bit.)</div>
+<div>So there you have it: <em>sources</em> and <strong>styles</strong>.</div>
+<div>One of the <em>awesome</em> things about <strong>Mapbox Studio</strong> is that it comes with a couple sources: <a href='https://mapbox.com/developers/vector-tiles/mapbox-streets'>Mapbox Streets</a> and <a href='https://mapbox.com/developers/vector-tiles/mapbox-terrain'>Mapbox Terrain.</div>
+<div>Today we will use these sources and focus on <em>styling</em> with <strong>CartoCSS</strong>.</div>
+<div><em>CartoCSS</em> is the language used in <strong>Mapbox Studio</strong> to <em>style</em> vector tile data.</div>
+<div>At its core it is a <em>pre-processing language</em> for Mapnik, the tool that <strong>renders the tiles</strong>, that is <em>easy</em> enough for us to use and <em>machine-like</em> enough for Mapnik to understand.</div>
+<div>Before we start styling, though...</div>
+<div data-bodyclass='puppy'>Part 2: Quick notes on the new Mapbox Studio</div>
+<div>As <a href='https://www.mapbox.com/blog/designing-a-map-with-mapbox-studio/'>some of you may have seen</a>, we are getting ready to release a <em>new</em> version of <strong>Mapbox Studio</strong>:</div>
+<div><iframe src='https://player.vimeo.com/external/134670690.hd.mp4?s=028152906d64c7dda3d05b336b93c061&profile_id=113'></iframe></div>
+<div>In the new Mapbox Studio, there will <strong>still</strong> be <em>sources</em> and <strong>styles</strong>.</div>
+<div><em>Sources</em> will stay the same, but it's the <strong>styling</strong> that will be different.</div>
+<div>The <em>new Mapbox Studio</em> will rely on <strong>client-side GL styling</strong> instead of <em>server-side Mapnik styling</em>.</div>
+<div>This will make the maps <strong>even faster</strong> and allow things like <em>fractional zoom styling</em>, <strong>map rotation</strong>, and <em>more freedom</em> outside the <strong>overlay/basemap</strong> way of thinking (all vectors!)</div>
+<div>Just like <em>CartoCSS</em> is a way for us to create <strong>Mapnik styles</strong>, the <em>new Mapbox Studio</em> will be a way for us to create <strong>GL styles</strong>.</div>
+<div>This will be <em>a bit different</em>, but by understanding how <strong>sources</strong> work, you will already have a leg up!</div>
 <div>So some of you may be like</div>
 <div data-bodyclass='mindblown'></div>
 <div>and some of you may be like</div>
@@ -297,96 +264,9 @@
 <div data-bodyclass='r2'></div>
 <div>And that's okay! This stuff is hard, but so helpful once you understand it.</div>
 <div>Ask lots of questions.</div>
-<div>Now, all of this being said...</div>
-<div>... understanding CartoCSS is still valuable.</div>
-<div>It's a super elegant way of creating styles</div>
-<div>and if you've never used CSS for webpages before, this will help you understand how those work, too.</div>
-<div>Also, Mapnik is still going to be around for things like</div>
-<div>raster processing (imagery, lidar, etc)</div>
-<div>And finally, maybe in the future</div>
-<div>you'll come up with some other crazy way of styling maps on the web and mobile</div>
-<div>and knowing the past will help so much when inventing the future.</div>
-<div>So let's dive into Mapbox Studio and CartoCSS.</div>
-<div>THIS IS WHERE YOU CAN STOP READING AND GIVE FEEDBACK!</div>
-<div>Go ahead and <em>open up Mapbox Studio</em>.</div>
-<div data-bodyclass='studio'></div>
-<div><em>Sidenote:</em> The first time Lyzi opened <strong>Mapbox Studio</strong>, she said out loud to no one, <em>"Holy carps! What is all this?"</em></div>
-<div>So if it looks confusing, <strong>don't worry</strong>! We'll <em>walk through it</em>.</div>
-<div data-bodyclass='save'>So, don't learn this the hard way: <strong>SAVE FIRST</strong>!</div>
-<div data-bodyclass='tour'><br><br><br><br>Once you've <em>saved</em>, go to the <strong>left column</strong>, Click <em>Docs</em>, then click <em>Interface tour</em>.</div>
-<div data-bodyclass='style-editor'><br><br><br><br><strong>Style Editor.</strong> This is mostly what we're going to be using today.</div>
-<div data-bodyclass='inspecting'><strong>Inspecting data.</strong> This is the <em>vector tile data</em> that will power our styling today.</div>
-<div>It's cool to <strong>see what's available</strong>, and it's especially cool that we <em>don't</em> have to deal with <strong>data wrangling</strong>!</div>
-<div data-bodyclass='cartocss'><strong>CartoCSS.</strong> CartoCSS is the language of tile styling.</div>
-<div>Mapbox Studio provides a <em>full CartoCSS reference</em> that's at our fingertips. We also have <strong>fonts</strong>!</div>
-<div data-bodyclass='vector-sources'><strong>Vector sources.</strong> Vector sources tell us how to write our <em>CartoCSS</em>.</div>
-<div>... and since this data is from <strong>OpenStreetMap</strong> we will use the different <em>feature tags</em> for styling.</div>
-<div>Click the <strong>inspector button</strong> to go back to style view.</div>
-<div data-bodyclass='inspecting'></div>
-<div>Let's walk through the <em>CartoCSS</em> and take a look at how this whole <strong>styling</strong> thing works.</div>
-<div>Line 2: <em>language</em>.</div>
-<div><pre><span>@name: '[name_en]';</span></pre></div>
-<div><pre><span>'[name]'</span></pre> will do localized labels.</div>
-<div>Lines 5-11: <em>selector variables</em> for reuse. Variables!</div>
-<div>Line 13: <em>Map</em>. In the left column, click on <strong>Docs</strong> to see what's available for <em>Map</em>. Right now, we are just using <pre><span>background-color</span></pre></div>
-<div>If it's still <em>pink</em> for you, go ahead and change the value back to <pre><span>@land</span></pre>. <strong>Save</strong> to see your changes on the map.</div>
-<div><em>Actually</em>, I don't like white for land. Let's change the value of <pre><span>@land</span></pre> to <pre><span>#ddd</span></pre>.</div>
-<div data-bodyclass='gray-land'><br><br><br>Ooh, <em>pretty</em>. Gray land!</div>
-<div>Lines 17-24: <em>Political boundaries</em>.</div>
-<div>Note the two statements in <strong>square brackets</strong>: <pre><span>[admin_level=2][maritime=0]</span></pre></div>
-<div>This is saying that this style rule <strong>only</strong> applies to <pre><span>#admin</span></pre> features that both have <pre><span>[admin_level=2]</span></pre> <em>and</em> <pre><span>[maritime=0]</span></pre></div>
-<div>(To do <strong>or</strong>, you would <em>separate</em> the parameters by a <strong>comma</strong>.)</div>
-<div>What do these <em>parameters</em> mean? Let's find out! Click <strong>Layers</strong> in the left column and scroll to find <pre><span>#admin</span></pre>. <em>Click</em> on it.</div>
-<div>So <pre><span>admin_level</span></pre> is the <strong>OSM administrative level</strong> of the boundary. <pre><span>maritime</span></pre> designates a <em>maritime</em> boundary.</div>
-<div>Lines 21-23: <em>nested conditions.</em> Line 21 applies to <pre><span>#admin</span></pre> features that are <pre><span>[admin_level=2]</span></pre>, <pre><span>[maritime=0]</span></pre> but only at <pre><span>[zoom>=6]</span></pre> (zoom levels <strong>6 and higher</strong>).</div>
-<div><em>Zoom in</em> on the map to <strong>zoom level 6</strong>. You can see the admin boundaries get <em>slightly wider</em>.</div>
-<div>(You can see what <strong>zoom level</strong> you're at in the <em>top right</em> of the map window.)</div>
-<div>Now zoom into <strong>zoom level 8</strong> -- you can <em>really</em> see the difference there!</div>
-<div data-bodyclass='z6to8'></div>
-<div>Line 26: <em>Places.</em> Let's talk about <strong>labels</strong>, baby!</div>
-<div>Line 28 starts with a <em>zoom level condition</em>. Country labels <strong>won't</strong> be shown at zoom levels <em>less than 3</em>!</div>
-<div><strong>Zoom</strong> out to zoom level 2 and watch the country names <em>disappear</em>.</div>
-<div data-bodyclass='z4to2'></div>
-<div><pre><span>scalerank</span></pre>: a <strong> metric</strong> for ranking how <em>important</em> a particular label is compared to <strong>other labels</strong> at that zoom.</div>
-<div><strong>Interesting thing:</strong> <pre><span>scalerank</span></pre> is a piece of data that comes from <em>Natural Earth</em>.</div>
-<div>The data that makes up <strong>Mapbox Streets</strong> (that we are using here in Studio) is <em>"Frankenstein data"</em> -- a mishmash of <strong>OpenStreetMap</strong> and <em>Natural Earth</em>.</div>
-<div>Line 49: <pre><span>#place_label</span></pre>: like <pre><span>#country_label</span></pre> but <em>more involved</em>.</div>
-<div>On <pre><span>polygon-gamma</span></pre>, Lyzi's notebook just says: <strong>"gammas - anti-aliasing. eyes - ow."</strong></div>
-<div>The rest of the style rules are <em>pretty similar</em> to the ones we just covered.</div>
-<div><strong>Woohoo!</strong> CartoCSS styling!</div>
-<div>Now let's move on to <em>part three</em> of our evening: actually <strong>editing</strong> the styles.</div>
-<div>First, <em>zoom to San Francisco</em>. You can do this with the <strong>search bar</strong> at top left.</div>
-<div data-bodyclass='search-sf'></div>
-<div><em>Zoom in</em> a bit so you can see the roads: <strong>zoom level 14</strong> is good.</div>
-<div>What is this style missing? <em>Buildings!</em> Let's add them in.</div>
-<div>Add <strong>this code</strong> to your <em>CartoCSS</em>:</div>
-<div><pre><span style="display: block; padding: 10px;"><strong>#building</strong>[<strong>zoom</strong>>=14] {<br>&nbsp;&nbsp;<em>polygon-fill:</em>#eee;<br>&nbsp;&nbsp;<em>line-width:</em>0.5;<br>&nbsp;&nbsp;<em>line-color:</em>#ddd;<br>}</span></pre></div>
-<div><strong>Save</strong> to see your changes.</div>
-<div data-bodyclass='buildings'><em>Buildings!</em></div>
-<div>But these are <strong>hard to see</strong>. Let's change our <em>land color</em> back to white by editing our <pre><span>@land</span></pre> variable.</div>
-<div data-bodyclass='white-land'><strong>Ah, much better.</strong></div>
-<div>Now let's add a little <em>depth</em> to our buildings at <strong>higher zooms</strong>. Add this:</div>
-<div><pre><span style="display: block; padding: 10px;"><strong>#building</strong>[<strong>zoom</strong>>=16] {<br>&nbsp;&nbsp;<em>building-fill:</em>#eee;<br>&nbsp;&nbsp;<em>building-fill-opacity:</em>0.9;<br>&nbsp;&nbsp;<em>building-height:</em>4;<br>}</span></pre></div>
-<div><strong>Save</strong> to see your changes.</div>
-<div data-bodyclass='buildings16'></div>
-<div>Pretty <em>cool</em>, right?</div>
-<div><strong>Indulge me</strong> in just <em>one more</em>.</div>
-<div>Let's add <strong>parks</strong> to our map! This one is <em>pretty easy</em>:</div>
-<div><pre><span style="display: block; padding: 10px;"><strong>#landuse</strong>[<strong>class</strong>='park'] {<br>&nbsp;&nbsp;<em>polygon-fill:</em>#dec;<br>}</span></pre></div>
-<div data-bodyclass='parks'></div>
-<div><em>Play around</em> here and try adding some <strong>additional styling</strong>.</div>
-<div>Remember you can <em>inspect sources</em> to find out what <strong>features</strong> you can style.</div>
-<div data-bodyclass='inspecting'></div>
-<div>Also feel free to <em>make a new project</em> with an <strong>existing Mapbox style</strong> to poke into <em>some other techniques</em> for map styling.</div>
-<div data-bodyclass='wheatpaste'></div>
-<div>Okay. <strong>Last part</strong>. Let's <em>upload</em> our styles to our <strong>Mapbox.com</strong> accounts.</div>
-<div>In the <em>left column</em>, click on <strong>Settings</strong>.</div>
-<div data-bodyclass='settings'></div>
-<div>Give your style a <strong>name</strong> and a <em>description</em>.</div>
-<div>Also be sure to <strong>restrict the zoom levels</strong> so you don't get an <em>upload error</em>.</div>
-<div>Push the <strong>big blue upload button</strong>!</div>
-<div><em>Click</em> on your <strong>Map ID</strong>. Now your style is <em>in your Mapbox account</em>!</div>
-<div>Now you can <strong>add it to a project</strong>, use it with <a href='https://mapbox.com/mapbox.js'>Mapbox.js</a>, and <em>share</em> it with your friends!</div>
+<div data-bodyclass='cactus'></div>
+<div data-bodyclass='puppy1'>Part 3: Playing with Mapbox Studio!</div>
+<div data-bodyclass='puppy'>Part 4: Conclusion</div>
 <div>What did we learn today?</div>
 <div>We learned about <strong>vector tiles</strong> and how they're made!</div>
 <div>We learned how to use the <strong>Mapbox Studio interface</strong>!</div>
@@ -394,10 +274,12 @@
 <div>We made our own <strong>map styles</strong>!</div>
 <div>We <strong>uploaded</strong> them to our Mapbox accounts!</div>
 <div><em>HOLY CARPS, Y'ALL!</em> That's awesome!</div>
+<div data-bodyclass='cactus'></div>
 <div>You <strong>totally kicked butt</strong> today. <em>Pat yourself on the back.</em></div>
 <div>Keep playing! <strong>Keep making stuff!</strong> It just gets <em>more fun</em>!</div>
 <div>Thanks.</div>
-<div><strong>Camille Teicheira<br>camille@mapbox.com<br>@fulgenteft</strong><br><em>Lyzi Diamond<br>lyzi@mapbox.com<br>@lyzidiamond</em></div>
+<div><strong>Lyzi Diamond</strong><br><a href='https://twitter.com/lyzidiamond'>@lyzidiamond</a><br><em>lyzi@mapbox.com</em></div>
+
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
