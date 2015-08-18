@@ -51,6 +51,9 @@
   .mindblown {
     background-image: url(http://i.giphy.com/DqSw5gyRQ5yPC.gif);
   }
+  .cats-sunglasses {
+    background-image: url(./images/cats-sunglasses.gif);
+  }
   .studio {
     background-image: url(./images/studio.png);
     background-size: 100%;
@@ -86,6 +89,14 @@
   }
   .vector-sources {
     background-image: url(./images/vector-sources.png);
+    background-position: center 5px;
+    background-size: 100%;
+    color: #eee;
+    text-shadow: 3px 3px 5px #222;
+    background-repeat: no-repeat;
+  }
+  .new-project {
+    background-image: url(./images/newproject.png);
     background-position: center 5px;
     background-size: 100%;
     color: #eee;
@@ -157,6 +168,13 @@
     background-size: 100%;
     text-shadow: 3px 3px 5px #000;
   }
+  .tile-loading {
+    background-image: url(./images/tile-loading.gif);
+    background-repeat: no-repeat;
+    background-position: center 5px;
+    background-size: 100%;
+    text-shadow: 3px 3px 5px #000;
+  }
   .confused {
     background-image: url(./images/confused.gif);
   }
@@ -199,54 +217,58 @@
 <div data-bodyclass='wheatpaste'></div>
 <div>So pretty!</div>
 <div><strong>How</strong> were these maps made?</div>
-<div>Part 1: Sources and styles</div>
-<div>All Mapbox maps are made from a <em>combination</em> of <strong>styles</strong> and <strong>sources</strong>.</div>
+<div>Part 1: <em>Sources</em> and <strong>styles</strong></div>
+<div>All <em>Mapbox maps</em> are made from a <em>combination</em> of <strong>styles</strong> and <strong>sources</strong>.</div>
 <div>The <em>source</em> is the <strong>underlying vector data</strong> that makes up the <em>features</em> on the map.</div>
 <div>(Sources can also be raster images, but we will come back to that.)</div>
 <div>The <em>style</em> is a file with a <strong>list of rules</strong> for how the <em>source</em> should be rendered.</div>
 <div>Mapbox Studio has a <strong>source mode</strong> and a <strong>style mode</strong>, and we're going to go over <em>both</em>...</div>
 <div>... but to understand and appreciate <strong>why</strong> the style-source paradigm is effective, we need to learn about <em>map tiles</em> and how they have <strong>changed</strong> over time.</div>
+<div data-bodyclass='puppy'></div>
 <div>The <em>biggest challenge</em> in web mapping from the <strong>very beginning</strong> has been <em>speed</em>.</div>
 <div>The world is a <strong>big place</strong>, and loading <em>detailed images</em> of the whole thing takes <strong>time</strong>.</div>
 <div data-bodyclass='tiles'>Thus came the invention of the <em>map tile</em> from Google in 2005.</div>
-<div><em>Map tiles</em> were 256px x 256px <strong>PNG</strong> files that were <em>stored</em> on the server and <em>served</em> to the browser on request.</div>
-<div>All of these small images load <strong>way faster</strong> than one giant image...</div>
+<div><em>Map tiles</em> are 256px x 256px <strong>PNG</strong> files that are <em>stored</em> on the server and <em>served</em> to the browser on request.</div>
+<div data-bodyclass='tile-loading'>All of these small images load <strong>way faster</strong> than one giant image...</div>
 <div>... and tiles are only loaded <em>where you're looking</em> in the world and at that <strong>one</strong> zoom level.</div>
 <div>This was <em>way faster</em> than anything else.</div>
 <div><strong>How</strong> were these tiles made?</div>
-<div>At <em>Mapbox</em>, we used a tool called <strong>TileMill</strong>.</div>
-<div>- Start with <em>vector data</em> (shapefile, GeoJSON, etc) and load into TileMill</div>
-<div>- Create a <em>stylesheet</em> using <strong>CartoCSS</strong>, a styling language, in TileMill</div>
-<div>- <em>Export</em> the data and stylesheet from TileMill to Mapbox.com, where a <strong>renderer</strong> (Mapnik) creates <em>map tiles</em></div>
+<div>At <em>Mapbox</em>, we used a tool called <strong>TileMill</strong>. The <em>process</em> was:</div>
+<div>1. Start with <em>vector data</em> (shapefile, GeoJSON, etc) and load into TileMill</div>
+<div>2. Create a <em>stylesheet</em> using <strong>CartoCSS</strong>, a styling language, in TileMill</div>
+<div>3. <em>Export</em> the data and stylesheet from TileMill to Mapbox.com, where a <strong>renderer</strong> (Mapnik) creates <em>map tiles</em></div>
 <div>The images were <em>created</em> at each zoom level and stored in a <strong>specific file structure</strong> as PNGs.</div>
 <div>When your map needs the image tile for a <strong>particular area</strong> at a <strong>particular zoom</strong>, your browser <em>requests</em> it from the server.</div>
 <div>This worked <strong>super well</strong> for a while, but had some <em>drawbacks</em>, particularly with <strong>retina displays</strong>.</div>
 <div>Storing <em>retina tiles</em> AND <strong>non-retina tiles</strong> would take up lots of space!</div>
 <div>And <em>storing images</em> was taking up a lot of space in the first place.</div>
 <div>So instead of storing <strong>fully-rendered images</strong>...</div>
-<div>... we started storing the <em>source data</em> separately from the <em>style rules</em> and then <strong>generating</strong> images when requested.</div>
+<div data-bodyclass='inspecting'>... we started storing the <em>source data</em> separately from the <em>style rules</em> and then <strong>generating</strong> images when requested.</div>
 <div data-bodyclass='mindblown'></div>
-<div>It's a little <strong>confusing</strong>, but fortunately <em>Mapbox Studio</em> makes it fairly straightforward!</div>
-<div>- Start with <em>vector data</em> (shapefile, GeoJSON, etc) and load into <strong>Mapbox Studio source mode</strong></div>
-<div>- <em>Upload</em> the vector data to Mapbox.com where it is converted to a <strong>vector tile dataset (PBF)</strong></div>
-<div>- Load that <em>vector tile dataset</em> into <strong>Mapbox Studio style mode</strong> and create a stylesheet using <em>CartoCSS</em> to style the data</div>
-<div>- <strong>Upload</strong> the <em>style</em> to Mapbox.com.</div>
+<div>It's a little <strong>confusing</strong>, but fortunately <em>Mapbox Studio</em> makes it fairly straightforward! The process is:</div>
+<div>1. Start with <em>vector data</em> (shapefile, GeoJSON, etc) and load into <strong>Mapbox Studio source mode</strong></div>
+<div>2. <em>Upload</em> the vector data to Mapbox.com where it is converted to a <strong>vector tile dataset (PBF)</strong></div>
+<div>3. Load that <em>vector tile dataset</em> into <strong>Mapbox Studio style mode</strong> and create a stylesheet using <em>CartoCSS</em> to style the data</div>
+<div>4. <strong>Upload</strong> the <em>style</em> to Mapbox.com.</div>
+<div data-bodyclass='new-project'></div>
 <div>The <em>style</em> now has a reference to the <strong>source</strong>.</div>
-<div>Now, when your map needs the image tile for a <strong>particular area</strong> at a <strong>particular zoom</strong>, your browser <em>requests</em> it from the server...</div>
+<div>And now, when your map needs the image tile for a <strong>particular area</strong> at a <strong>particular zoom</strong>, your browser <em>requests</em> it from the server...</div>
 <div>... and the server <strong>applies</strong> the <em>style</em> to the <em>source</em>, <strong>generates</strong> an image (with Mapnik), and <strong>serves</strong> that image to the client.</div>
-<div>We call these <strong>vector tiles</strong>.</div>
+<div data-bodyclass='vector-tiles'>We call these <strong>vector tiles</strong>.</div>
 <div>Vector tiles are <em>awesome</em> because:</div>
-<div>- All of the <strong>properties</strong> and <strong>geometries</strong> of the vector data are stored.</div>
-<div>- <strong>Multiple</strong> styles can be applied to the <em>same</em> source data</div>
-<div>- The info takes up <strong>way</strong> less space, which means it's <strong>way</strong> less expensive</div>
-<div>- It opens up the door for <em>different rendering options</em> like <strong>GL</strong></div>
+<div>All of the <strong>properties</strong> and <strong>geometries</strong> of the vector data are stored.</div>
+<div><strong>Multiple</strong> styles can be applied to the <em>same</em> source data</div>
+<div>The info takes up <strong>way</strong> less space, which means it's <strong>way</strong> less expensive</div>
+<div>It opens up the door for <em>different rendering options</em> like <strong>GL</strong></div>
 <div>(More about that in a bit.)</div>
 <div>So there you have it: <em>sources</em> and <strong>styles</strong>.</div>
-<div>One of the <em>awesome</em> things about <strong>Mapbox Studio</strong> is that it comes with a couple sources: <a href='https://mapbox.com/developers/vector-tiles/mapbox-streets'>Mapbox Streets</a> and <a href='https://mapbox.com/developers/vector-tiles/mapbox-terrain'>Mapbox Terrain.</div>
+<div data-bodyclass='cats-sunglasses'></div>
+<div>One of the <em>great</em> things about <strong>Mapbox Studio</strong> is that it comes with a couple sources: <a href='https://mapbox.com/developers/vector-tiles/mapbox-streets'>Mapbox Streets</a> and <a href='https://mapbox.com/developers/vector-tiles/mapbox-terrain'>Mapbox Terrain</a>.</div>
 <div>Today we will use these sources and focus on <em>styling</em> with <strong>CartoCSS</strong>.</div>
+<div data-bodyclass='style-editor'></div>
 <div><em>CartoCSS</em> is the language used in <strong>Mapbox Studio</strong> to <em>style</em> vector tile data.</div>
 <div>At its core it is a <em>pre-processing language</em> for Mapnik, the tool that <strong>renders the tiles</strong>, that is <em>easy</em> enough for us to use and <em>machine-like</em> enough for Mapnik to understand.</div>
-<div>Before we start styling, though...</div>
+<div><strong>Before</strong> we start styling, though...</div>
 <div data-bodyclass='puppy'>Part 2: Quick notes on the new Mapbox Studio</div>
 <div>As <a href='https://www.mapbox.com/blog/designing-a-map-with-mapbox-studio/'>some of you may have seen</a>, we are getting ready to release a <em>new</em> version of <strong>Mapbox Studio</strong>:</div>
 <div><iframe src='https://player.vimeo.com/external/134670690.hd.mp4?s=028152906d64c7dda3d05b336b93c061&profile_id=113'></iframe></div>
